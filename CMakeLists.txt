@@ -13,6 +13,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+# Need the package to request the weather data
+find_package(rfm_http_requester REQUIRED)
+# Need the package to that is used to request data
+find_package(rfm_weather_api REQUIRED)
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -43,7 +48,12 @@ else()
     endif()
 endif()
 
-target_link_libraries(deskUI PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+set(PROJECT_LIBRARIES
+  rfm_http_requester::rfm_http_requester
+  rfm_weather_api::rfm_weather_api
+  Qt${QT_VERSION_MAJOR}::Widgets
+)
+target_link_libraries(deskUI PRIVATE "${PROJECT_LIBRARIES}")
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
